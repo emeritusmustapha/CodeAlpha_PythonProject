@@ -1,48 +1,54 @@
 import random
 
-word_list = ["python", "hangman", "developer", "internship", "codealpha"]
+words = ["python", "hangman", "developer", "internship", "codealpha"]
 
-word = random.choice(word_list).lower()
-guessed_letters = []
-attempts_left = 6
+chosen_word = random.choice(words)
+guessed = []
+tries = 6
 
-print("Welcome to Hangman!")
-print("Guess the word one letter at a time.\n")
+print("Let's play Hangman!")
 
-while attempts_left > 0:
-    display = ""
-    for letter in word:
-        if letter in guessed_letters:
-            display += letter + " "
+while tries > 0:
+    hidden = ""
+    for letter in chosen_word:
+        if letter in guessed:
+            hidden += letter + " "
         else:
-            display += "_ "
+            hidden += "_ "
     
-    print(f"Word: {display}")
-    print(f"Attempts left: {attempts_left}")
-    print(f"Guessed letters: {', '.join(sorted(guessed_letters)) if guessed_letters else 'None'}")
+    print("\nWord:", hidden)
+    print("Tries left:", tries)
+    print("Letters guessed:", guessed)
     
-    guess = input("Guess a letter: ").strip().lower()
+    guess = input("Guess a letter: ").lower()
     
     if len(guess) != 1 or not guess.isalpha():
-        print("Please enter a single letter.\n")
+        print("Just one letter please")
         continue
     
-    if guess in guessed_letters:
-        print("You already guessed that letter.\n")
+    if guess in guessed:
+        print("You already tried that one")
         continue
     
-    guessed_letters.append(guess)
+    guessed.append(guess)
     
-    if guess in word:
-        print("Good guess!\n")
+    if guess in chosen_word:
+        print("Yeah, that's in there")
     else:
-        attempts_left -= 1
-        print(f"Wrong guess! '{guess}' is not in the word.\n")
+        tries -= 1
+        print("Nope, not in the word")
     
-    if all(letter in guessed_letters for letter in word):
-        print(f"Congratulations! You guessed the word: {word}")
+    all_good = True
+    for letter in chosen_word:
+        if letter not in guessed:
+            all_good = False
+            break
+    
+    if all_good:
+        print("\nYou got it! The word was", chosen_word)
         break
-else:
-    print(f"Game over! The word was: {word}")
 
-print("Thanks for playing!")
+if tries == 0:
+    print("\nYou lost. The word was", chosen_word)
+
+print("Game over")
